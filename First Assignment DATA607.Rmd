@@ -1,0 +1,88 @@
+---
+title: "First Assignment DATA607"
+author: "Koohyar Pooladvand"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# What and why
+
+For the first assignment of DATA607, I selected one of the databases from <https://data.fivethirtyeight.com/> and followed the 8-step instruction on the assignment page. I chose the 2022 World Cup Predictions database, which has two CSV files: one for the match data and one for the forecast data. I am interested in soccer, so this database appealed to me.
+
+The zip file containing the data can be downloaded from this link, which I will use to load the data into my project.
+
+Here is the address to download the zip file from the website, this address will be used to pull in the data as needed.
+
+-   GitHub: data/world-cup-2022 at master · fivethirtyeight/data (github.com)
+
+-   Match: <https://projects.fivethirtyeight.com/soccer-api/international/2022/wc_matches.csv>
+
+-   Forcast: <https://projects.fivethirtyeight.com/soccer-api/international/2022/wc_forecasts.csv>
+
+## Code to reproducibility purposes
+
+This code snippet shows how to download data from the web and store it in data frames for both forecast and match variables. The data can be accessed by anyone in the world who has an internet connection.:
+
+```{r, echo=FALSE}
+#| label: load-packages
+
+#Written by Koohyar Pooladvand
+#Semister Spring 2024
+#what: First assignment for DATA607, 
+
+#Run the follwing command in case, function are not found  
+#install.packages("RCurl")
+#install.packages("tidyverse")
+#install.packages("data.table")
+
+library(RCurl)
+library(tidyverse)
+library(data.table)
+
+#load forcast
+Int_data_handle <- getURL("https://projects.fivethirtyeight.com/soccer-api/international/2022/wc_forecasts.csv")
+Forcast_data<-data.frame(read.csv(text=Int_data_handle, header=TRUE))
+
+print("The size of Forcast dataframen and let's take a look at it using glimpse")
+dim(Forcast_data)
+glimpse(Forcast_data)
+#change column name, I want to change of the column spi to soccer_power_index
+colnames(Forcast_data)[4] <- "soccer_power_index"
+
+
+
+# load the match data 
+Int_data_handle <- getURL("https://projects.fivethirtyeight.com/soccer-api/international/2022/wc_matches.csv")
+Match_data<-data.frame(read.csv(text=Int_data_handle, header=TRUE))
+print("The size of Match dataframe, and let's take a look at it using glimpse")
+dim(Match_data)
+glimpse(Match_data)
+
+
+```
+
+## Including Plots
+
+This plot is added to the report, it is only a plot of the 4 countries taht made it to the semi-final of world cup:
+
+```{r, echo=FALSE}
+#find the countries that made it to the final match for worldcup semi-final and plot their SPI.
+world_cup_semi <- Match_data[c(dim(Match_data)[1]-1,dim(Match_data)[1]),c(seq(4,7,1))]
+
+barplot(c(world_cup_semi$spi1,world_cup_semi$spi2),
+        names.arg=c(world_cup_semi$team1,world_cup_semi$team2),
+        main = "Worldcup semi final team Soccer Power Index (SPI)", 
+        xlab = "Country", ylab = "SPI", col = "blue")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Conclusion
+
+This project demonstrates how to create a bar chart that shows the SPI of the four countries that reached the semi-final stage in the 2023 World Cup. The data is obtained from an online source and stored in a data frame using R. I also learned how to use R-markdown to document my code, how to upload my project to GitHub, and how to publish it on RPub.
+
+To read the data, I used the read.csv function from the base package of R, but I also loaded the data.table package in case I wanted to use the fread function instead. I alos used R base barplot to plot the final result.
