@@ -27,7 +27,7 @@ Here is the address to download the zip file from the website, this address will
 
 This code snippet shows how to download data from the web and store it in data frames for both forecast and match variables. The data can be accessed by anyone in the world who has an internet connection.:
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
 #| label: load-packages
 
 #Written by Koohyar Pooladvand
@@ -69,7 +69,7 @@ glimpse(Match_data)
 
 This plot is added to the report, it is only a plot of the 4 countries taht made it to the semi-final of world cup:
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
 #find the countries that made it to the final match for worldcup semi-final and plot their SPI.
 world_cup_semi <- Match_data[c(dim(Match_data)[1]-1,dim(Match_data)[1]),c(seq(4,7,1))]
 
